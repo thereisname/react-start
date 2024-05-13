@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import './App.css'
 
-function ItemComponent(props) {
+function ItemComponent({ children, member, onChange }) {
   // children: react에서 제공하는 예약어
   return (
     <li>
-      <div>{props.children}</div>
-      <input value={props.member.desc} />
+      <div>{children}</div>
+      <div>{member.desc}</div>
+      <input
+        value={member.desc}
+        onChange={(e) => {
+          onChange({ ...member, desc: e.target.value })
+        }}
+      />
     </li>
   )
 }
@@ -35,24 +41,19 @@ const initMembers = [
 ]
 
 function ListComponent() {
-  const [members, setMembers] = useState()
-  const [selectedMember, setSelectedMember] = useState(initMembers[0])
+  const [members, setMembers] = useState(initMembers)
   return (
     <>
       <ul>
-        {initMembers.map((eachMember) => {
+        {members.map((eachMember) => {
           return (
             <ItemComponent
               key={eachMember.id}
               member={eachMember}
               onChange={(changedMember) => {
-                const changedMembers = members.map((each) => {
-                  if (eachMember.id === each.id) {
-                    return changedMember
-                  } else {
-                    return each
-                  }
-                })
+                const changedMembers = members.map((each) =>
+                  each.id === eachMember.id ? changedMember : each,
+                )
                 setMembers(changedMembers)
               }}
             >
@@ -61,24 +62,13 @@ function ListComponent() {
           )
         })}
       </ul>
-      <div>내가 선택한것은 무엇이야: {selectedMember.name}</div>
     </>
   )
 }
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <ListComponent />
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
     </>
   )
 }
