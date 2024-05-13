@@ -32,13 +32,28 @@ function ItemComponent({ children, member, onChange }) {
     <li>
       <div>{children}</div>
       {clicked ? (
-        <input
-          value={member.desc}
-          onChange={(e) => {
-            onChange({ ...member, desc: e.target.value })
-          }}
-          onClick={() => setClicked(!clicked)}
-        />
+        <div>
+          <input
+            value={member.desc}
+            onChange={(e) => {
+              onChange({ ...member, desc: e.target.value })
+            }}
+          />
+          <button
+            onClick={() => {
+              setClicked(!clicked)
+            }}
+          >
+            확인
+          </button>
+          <button
+            onClick={() => {
+              setClicked(!clicked)
+            }}
+          >
+            취소
+          </button>
+        </div>
       ) : (
         <div onClick={() => setClicked(!clicked)}>
           <div>{member.desc}</div>
