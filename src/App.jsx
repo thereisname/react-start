@@ -1,22 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 
-function ItemComponent({ children, member, onChange }) {
-  // children: react에서 제공하는 예약어
-  return (
-    <li>
-      <div>{children}</div>
-      <div>{member.desc}</div>
-      <input
-        value={member.desc}
-        onChange={(e) => {
-          onChange({ ...member, desc: e.target.value })
-        }}
-      />
-    </li>
-  )
-}
-
 const initMembers = [
   {
     id: 1,
@@ -39,6 +23,30 @@ const initMembers = [
     desc: '잘부탁드립니다.',
   },
 ]
+
+function ItemComponent({ children, member, onChange }) {
+  const [clicked, setClicked] = useState(false)
+  // children: react에서 제공하는 예약어
+
+  return (
+    <li>
+      <div>{children}</div>
+      {clicked ? (
+        <input
+          value={member.desc}
+          onChange={(e) => {
+            onChange({ ...member, desc: e.target.value })
+          }}
+          onClick={() => setClicked(!clicked)}
+        />
+      ) : (
+        <div onClick={() => setClicked(!clicked)}>
+          <div>{member.desc}</div>
+        </div>
+      )}
+    </li>
+  )
+}
 
 function ListComponent() {
   const [members, setMembers] = useState(initMembers)
