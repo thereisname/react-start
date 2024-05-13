@@ -1,61 +1,76 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 
-// function MyFirstReactComponent(props) {
-//   // const [captured, setCaptured] = useState(props.count)
+function ItemComponent(props) {
+  // children: react에서 제공하는 예약어
+  return (
+    <li>
+      <div>{props.children}</div>
+      <input value={props.member.desc} />
+    </li>
+  )
+}
 
-//   // [props.count]의 값이 변하면 setCaptured()로 값을 변경시킴.
-//   /*
-//     useEffect에서 파라미터는 함수와, array가 존재하는데
-//     array의 값이 바뀐다면(상태 변경) 함수를 실행시켜라는 의미로
-//     여기서는 값을 변경한다.
+const initMembers = [
+  {
+    id: 1,
+    name: 'Aaron',
+    desc: '잘부탁드립니다.',
+  },
+  {
+    id: 2,
+    name: 'Baron',
+    desc: '잘부탁드립니다.',
+  },
+  {
+    id: 3,
+    name: 'Caron',
+    desc: '잘부탁드립니다.',
+  },
+  {
+    id: 4,
+    name: 'Daron',
+    desc: '잘부탁드립니다.',
+  },
+]
 
-//     아래 주석 처리된 코드는 가능한 이런 방식으로 사용하지말것!
-//     */
-
-//   // useEffect(() => {
-//   //   setCaptured(props.count)
-//   // }, [props.count])
-
-//   return (
-//     <div>
-//       우와 행복하다!: {props.name} - {props.count}
-//       <button
-//         onClick={() => {
-//           props.setCount(props.count + 1)
-//         }}
-//       >
-//         {'나도 부모님의 상태 바꿀래!'}
-//       </button>
-//     </div>
-//   )
-// }
-
+function ListComponent() {
+  const [members, setMembers] = useState()
+  const [selectedMember, setSelectedMember] = useState(initMembers[0])
+  return (
+    <>
+      <ul>
+        {initMembers.map((eachMember) => {
+          return (
+            <ItemComponent
+              key={eachMember.id}
+              member={eachMember}
+              onChange={(changedMember) => {
+                const changedMembers = members.map((each) => {
+                  if (eachMember.id === each.id) {
+                    return changedMember
+                  } else {
+                    return each
+                  }
+                })
+                setMembers(changedMembers)
+              }}
+            >
+              {eachMember.name}
+            </ItemComponent>
+          )
+        })}
+      </ul>
+      <div>내가 선택한것은 무엇이야: {selectedMember.name}</div>
+    </>
+  )
+}
 function App() {
   const [count, setCount] = useState(0)
-  const [string, setString] = useState('')
-  const stringRef = useRef()
-
-  console.log('rerendered')
 
   return (
     <>
-      {/* <MyFirstReactComponent name='Aaron' count={count} setCount={setCount} /> */}
-      <button
-        onClick={() => {
-          console.log(stringRef.current.value)
-        }}
-      >
-        Ref 안에 무엇이 있을까?
-      </button>
-      <input
-        type='text'
-        ref={stringRef}
-        // value={string}
-        // onChange={(e) => {
-        //   setString(e.target.value)
-        // }}
-      />
+      <ListComponent />
       <h1>Vite + React</h1>
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
